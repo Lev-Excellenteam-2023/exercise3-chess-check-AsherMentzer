@@ -5,9 +5,13 @@
 # Note: The pygame tutorial by Eddie Sharick was used for the GUI engine. The GUI code was altered by Boo Sung Kim to
 # fit in with the rest of the project.
 #
+import datetime
+import os
+
 import chess_engine
 import pygame as py
-
+import logging
+import time
 import ai_engine
 from enums import Player
 
@@ -18,12 +22,14 @@ SQ_SIZE = HEIGHT // DIMENSION  # the size of each of the squares in the board
 MAX_FPS = 15  # FPS for animations
 IMAGES = {}  # images for the chess pieces
 colors = [py.Color("white"), py.Color("gray")]
+LOG_FORMAT = "%(asctime)s %(levelname)s %(message)s"
+
 
 # TODO: AI black has been worked on. Mirror progress for other two modes
 def load_images():
-    '''
+    """
     Load images for the chess pieces
-    '''
+    """
     for p in Player.PIECES:
         IMAGES[p] = py.transform.scale(py.image.load("images/" + p + ".png"), (SQ_SIZE, SQ_SIZE))
 
@@ -86,6 +92,18 @@ def highlight_square(screen, game_state, valid_moves, square_selected):
 
 
 def main():
+    # Create and configure logger
+
+    logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(asctime)s  %(message)s')
+    time = datetime.datetime.now()
+    if not os.path.exists('logs'):
+        print("creat")
+        os.makedirs('logs')
+    logging.basicConfig(filename=os.path.join("logs", time.strftime('log_%H_%M_%S_%d_%m_%Y.log')), level=logging.DEBUG,
+                        format='%(levelname)s: %(asctime)s  %(message)s')
+    logging.info("""
+        ------------------------------
+             starting new game""")
     # Check for the number of players and the color of the AI
     human_player = ""
     while True:
