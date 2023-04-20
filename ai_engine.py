@@ -11,11 +11,12 @@ from enums import Player
 
 
 class chess_ai:
-    '''
+    """
     call minimax with alpha beta pruning
     evaluate board
     get the value of each piece
-    '''
+    """
+
     def minimax_white(self, game_state, depth, alpha, beta, maximizing_player, player_color):
         csc = game_state.checkmate_stalemate_checker()
         if maximizing_player:
@@ -141,7 +142,7 @@ class chess_ai:
 
     def get_piece_value(self, piece, player):
         if player is Player.PLAYER_1:
-            if piece.is_player("black"):
+            if piece.is_player("white"):
                 if piece.get_name() is "k":
                     return -1000
                 elif piece.get_name() is "q":
@@ -168,7 +169,7 @@ class chess_ai:
                 elif piece.get_name() is "p":
                     return 10
         else:
-            if piece.is_player("white"):
+            if piece.is_player("white"):  # --------------black?
                 if piece.get_name() is "k":
                     return 1000
                 elif piece.get_name() is "q":
