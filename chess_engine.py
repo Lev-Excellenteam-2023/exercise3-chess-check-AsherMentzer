@@ -157,7 +157,7 @@ class game_state:
                                 pass
                             else:
                                 can_move = False
-                                logging.info("There is a check")
+                                # logging.info("There is a check")
                             self.board[current_row][current_col] = temp
                             self.board[move[0]][move[1]] = temp2
                         elif move == piece and len(checking_pieces) == 1 and moving_piece.get_name() is not "k" and \
@@ -170,7 +170,7 @@ class game_state:
                             self.board[current_row][current_col] = Player.EMPTY
                             if self.check_for_check(king_location, moving_piece.get_player())[0]:
                                 can_move = False
-                                logging.info("There is a check")
+                                # logging.info("There is a check")
                             self.board[current_row][current_col] = moving_piece
                             self.board[move[0]][move[1]] = temp
                         else:
@@ -223,6 +223,10 @@ class game_state:
     def checkmate_stalemate_checker(self):
         all_white_moves = self.get_all_legal_moves(Player.PLAYER_1)
         all_black_moves = self.get_all_legal_moves(Player.PLAYER_2)
+        if self.whose_turn():
+            self.check_for_check(self._white_king_location,Player.PLAYER_1)
+        else:
+            self.check_for_check(self._black_king_location,Player.PLAYER_2)
         if self._is_check and self.whose_turn() and not all_white_moves:
             print("white lost")
             return 0
