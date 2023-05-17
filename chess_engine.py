@@ -58,6 +58,9 @@ class game_state:
         white_bishop_2 = Bishop('b', 0, 5, Player.PLAYER_1)
         white_queen = Queen('q', 0, 4, Player.PLAYER_1)
         white_king = King('k', 0, 3, Player.PLAYER_1)
+
+        pawns_white = [Pawn('p', 1, index, Player.PLAYER_1) for index in range(8)]
+        """""
         white_pawn_1 = Pawn('p', 1, 0, Player.PLAYER_1)
         white_pawn_2 = Pawn('p', 1, 1, Player.PLAYER_1)
         white_pawn_3 = Pawn('p', 1, 2, Player.PLAYER_1)
@@ -66,10 +69,10 @@ class game_state:
         white_pawn_6 = Pawn('p', 1, 5, Player.PLAYER_1)
         white_pawn_7 = Pawn('p', 1, 6, Player.PLAYER_1)
         white_pawn_8 = Pawn('p', 1, 7, Player.PLAYER_1)
+        """""
         self.white_pieces = [white_rook_1, white_rook_2, white_knight_1, white_knight_2, white_bishop_1, white_bishop_2,
-                             white_queen, white_king, white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_4,
-                             white_pawn_5,
-                             white_pawn_6, white_pawn_7, white_pawn_8]
+                             white_queen, white_king]
+        self.white_pieces += pawns_white
 
         # Initialize Black Pieces
         black_rook_1 = Rook('r', 7, 0, Player.PLAYER_2)
@@ -80,36 +83,42 @@ class game_state:
         black_bishop_2 = Bishop('b', 7, 5, Player.PLAYER_2)
         black_queen = Queen('q', 7, 4, Player.PLAYER_2)
         black_king = King('k', 7, 3, Player.PLAYER_2)
-        black_pawn_1 = Pawn('p', 6, 0, Player.PLAYER_2)
-        black_pawn_2 = Pawn('p', 6, 1, Player.PLAYER_2)
-        black_pawn_3 = Pawn('p', 6, 2, Player.PLAYER_2)
-        black_pawn_4 = Pawn('p', 6, 3, Player.PLAYER_2)
-        black_pawn_5 = Pawn('p', 6, 4, Player.PLAYER_2)
-        black_pawn_6 = Pawn('p', 6, 5, Player.PLAYER_2)
-        black_pawn_7 = Pawn('p', 6, 6, Player.PLAYER_2)
-        black_pawn_8 = Pawn('p', 6, 7, Player.PLAYER_2)
+        pawns_black = [Pawn('p', 6, index, Player.PLAYER_2) for index in range(8)]
         self.black_pieces = [black_rook_1, black_rook_2, black_knight_1, black_knight_2, black_bishop_1, black_bishop_2,
-                             black_queen, black_king, black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_4,
-                             black_pawn_5,
-                             black_pawn_6, black_pawn_7, black_pawn_8]
+                             black_queen, black_king]
+        self.black_pieces += pawns_black
 
         self.board = [
             [white_rook_1, white_knight_1, white_bishop_1, white_king, white_queen, white_bishop_2, white_knight_2,
              white_rook_2],
-            [white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_4, white_pawn_5, white_pawn_6, white_pawn_7,
-             white_pawn_8],
-            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
-             Player.EMPTY],
-            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
-             Player.EMPTY],
-            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
-             Player.EMPTY],
-            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
-             Player.EMPTY],
-            [black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_4, black_pawn_5, black_pawn_6, black_pawn_7,
-             black_pawn_8],
+            pawns_white,
+            [Player.EMPTY] * 8,
+            [Player.EMPTY] * 8,
+            [Player.EMPTY] * 8,
+            [Player.EMPTY] * 8,
+            pawns_black,
             [black_rook_1, black_knight_1, black_bishop_1, black_king, black_queen, black_bishop_2, black_knight_2,
              black_rook_2]
+        ]
+
+    def init_empty_board(self):
+        self.board = [
+            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
+             Player.EMPTY],
+            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
+             Player.EMPTY],
+            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
+             Player.EMPTY],
+            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
+             Player.EMPTY],
+            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
+             Player.EMPTY],
+            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
+             Player.EMPTY],
+            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
+             Player.EMPTY],
+            [Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY, Player.EMPTY,
+             Player.EMPTY]
         ]
 
     def get_piece(self, row, col):
@@ -224,9 +233,9 @@ class game_state:
         all_white_moves = self.get_all_legal_moves(Player.PLAYER_1)
         all_black_moves = self.get_all_legal_moves(Player.PLAYER_2)
         if self.whose_turn():
-            self.check_for_check(self._white_king_location,Player.PLAYER_1)
+            self.check_for_check(self._white_king_location, Player.PLAYER_1)
         else:
-            self.check_for_check(self._black_king_location,Player.PLAYER_2)
+            self.check_for_check(self._black_king_location, Player.PLAYER_2)
         if self._is_check and self.whose_turn() and not all_white_moves:
             print("white lost")
             return 0
